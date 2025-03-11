@@ -3,7 +3,7 @@ import {
   saveNote,
   getNotes,
   generateSummary,
-} from "../controllers/noteController.js";
+} from "../controllers/noteController.ts";
 
 export const noteRouter = express.Router();
 

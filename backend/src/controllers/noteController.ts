@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
-import { AppDataSource } from "../db.js";
-import { Note } from "../models/Note.js";
-import { getChatCompletionAxios } from "../openrouter.js";
+import { AppDataSource } from "../db.ts";
+import { Note } from "../models/Note.ts";
+import { getChatCompletionAxios } from "../openrouter.ts";
 
 const noteRepository = AppDataSource.getRepository(Note);
 

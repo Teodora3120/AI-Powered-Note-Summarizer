@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { noteRouter } from "./routes/noteRoutes.js";
-import { AppDataSource } from "./db.js";
+import { noteRouter } from "./routes/noteRoutes.ts";
+import { AppDataSource } from "./db.ts";
 import "dotenv/config";
 
 const app = express();

@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { Note } from "./models/Note.js";
+import { Note } from "./models/Note.ts";
 import "dotenv/config";
 
 const DB = process.env.DATABASE_URL;
