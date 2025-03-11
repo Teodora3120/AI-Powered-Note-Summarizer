@@ -1,19 +1,29 @@
 import express from "express";
 import cors from "cors";
-import { noteRouter } from "./routes/noteRoutes";
-require('dotenv').config()
+import { noteRouter } from "./routes/noteRoutes.js";
+import { AppDataSource } from "./db.js";
+import "dotenv/config";
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// ✅ Initialize the database before starting the server
+AppDataSource.initialize()
+  .then(() => {
+    console.log("✅ Connected to PostgreSQL with TypeORM");
 
-// Routes
-app.use("/api/notes", noteRouter);
+    // Middleware
+    app.use(cors());
+    app.use(express.json());
 
-// Start server
-app.listen(port, () => {
-    console.log(`Server running on PORT ${port}`);
-});
+    // Routes
+    app.use("/api/v1/notes", noteRouter);
+
+    // Start server
+    app.listen(port, () => {
+      console.log(`🚀 Server running on PORT ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("❌ Database connection error:", error);
+  });
