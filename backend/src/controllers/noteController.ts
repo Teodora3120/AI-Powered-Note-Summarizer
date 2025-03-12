@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../db.ts";
 import { Note } from "../models/Note.ts";
-import { getChatCompletionAxios } from "../openrouter.ts";
+import { getChatCompletion } from "../openrouter.ts";
 
 const noteRepository = AppDataSource.getRepository(Note);
 
@@ -48,7 +48,7 @@ export const generateSummary = async (req: Request, res: Response) => {
   }
   const prompt = "Please summarize this text: " + noteText;
   try {
-    const response = await getChatCompletionAxios(prompt);
+    const response = await getChatCompletion(prompt);
     res.status(200).json({ messsage: response });
     return;
   } catch (err) {
