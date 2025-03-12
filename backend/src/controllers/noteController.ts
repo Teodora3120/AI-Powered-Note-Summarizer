@@ -20,7 +20,7 @@ export const saveNote = async (req: Request, res: Response) => {
     return;
   } catch (err: any) {
     console.error(err.message);
-    res.status(200).json({ message: "Note saved successfully" });
+    res.status(200).json({ message: err.message });
     return;
   }
 };
@@ -46,14 +46,7 @@ export const generateSummary = async (req: Request, res: Response) => {
     res.status(400).json({ error: "Note text is required." });
     return;
   }
+
   const prompt = "Please summarize this text: " + noteText;
-  try {
-    const response = await getChatCompletion(prompt);
-    res.status(200).json({ messsage: response });
-    return;
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ error: "Error generating summary" });
-    return;
-  }
+  await getChatCompletion(prompt, res);
 };

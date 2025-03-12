@@ -11,7 +11,3 @@ export const AppDataSource = new DataSource({
   synchronize: true,
   // dropSchema: true
 });
-
-AppDataSource.initialize()
-  .then(() => console.log("✅ Connected to PostgreSQL with TypeORM"))
-  .catch((error) => console.log(error));
