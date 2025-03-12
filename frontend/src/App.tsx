@@ -1,12 +1,14 @@
-import React from 'react';
-import { NoteInput } from './components/NoteInput';
-import './assets/style.css'
+import React from "react";
+import { NoteInput } from "./components/NoteInput";
+import Navbar from "./components/Navbar";
+import "./assets/style.css";
 
 function App() {
   return (
-    <div className='app-container'>
+    <>
+      <Navbar />
       <NoteInput />
-    </div>
+    </>
   );
 }
 

@@ -39,7 +39,7 @@ export const NoteInput = () => {
   };
 
   return (
-    <>
+    <div className="app-container">
       <div>
         <TextField
           label="Introduceti notita"
@@ -63,11 +63,6 @@ export const NoteInput = () => {
           </Card>
         )}
       </div>
-      <div>
-        <Button className="bg-red-900 g-blue-500 py-2 px-4 rounded">
-          Tailwind
-        </Button>
-      </div>
-    </>
+    </div>
   );
 };
