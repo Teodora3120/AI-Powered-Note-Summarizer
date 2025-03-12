@@ -10,7 +10,7 @@ export class Note {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column("text", { nullable: true })
   content: string;
 
   @CreateDateColumn()
