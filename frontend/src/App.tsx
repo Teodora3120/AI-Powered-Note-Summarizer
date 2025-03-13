@@ -1,16 +1,26 @@
 import React from "react";
-import { NoteInput } from "./components/NoteInput";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
-import "./assets/style.css";
 import Footer from "./components/Footer";
+
+import { AIChat } from "./components/AIChat";
+import { Notes } from "./components/Notes";
+
+import "./assets/style.css";
 
 function App() {
   return (
     <div id="root">
       <Navbar />
-      <div className="app-container">
-        <NoteInput />
-      </div>
+      <Router>
+        <div className="app-container">
+          <Routes>
+            <Route path="/" element={<AIChat />} />
+            <Route path="/notes" element={<Notes />} />
+          </Routes>
+        </div>
+      </Router>
       <Footer />
     </div>
   );

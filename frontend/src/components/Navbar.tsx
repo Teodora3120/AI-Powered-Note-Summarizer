@@ -13,10 +13,18 @@ export default function Navbar() {
           <Typography
             variant="h6"
             component="a"
-            href="#"
+            href="/"
             className="!text-white !font-mono !font-bold !tracking-widest !no-underline"
           >
             AI Note Summarizer
+          </Typography>
+          <Typography
+            variant="h6"
+            component="a"
+            href="/notes"
+            className="!text-white !font-mono !font-bold !tracking-widest !no-underline !ml-auto"
+          >
+            Saved notes
           </Typography>
         </Toolbar>
       </Container>

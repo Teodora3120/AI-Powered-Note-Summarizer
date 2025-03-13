@@ -12,10 +12,10 @@ export class NotesApi {
     this.url = backendUrl;
   }
 
-  public async handleSaveNote(noteText: string) {
+  public async handleSaveNote(summary: string) {
     try {
       const response = await axios.post(`${this.url}/api/v1/notes/save`, {
-        noteText,
+        summary,
       });
       return response.data;
     } catch (error) {
@@ -34,13 +34,16 @@ export class NotesApi {
 
   public async handleGenerateSummary(
     noteText: string,
+    temperature: number,
+    length: string,
+    tone: string,
     onStreamUpdate: (chunk: string) => void
   ) {
     try {
       const response = await fetch(`${this.url}/api/v1/notes/summarize`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ noteText }),
+        body: JSON.stringify({ noteText, temperature, length, tone }),
       });
 
       if (!response.body) {

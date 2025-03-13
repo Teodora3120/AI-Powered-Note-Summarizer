@@ -2,7 +2,11 @@ import { Response } from "express";
 import "dotenv/config";
 import OpenAI from "openai";
 
-export async function getChatCompletion(prompt: string, res: Response) {
+export async function getChatCompletion(
+  prompt: string,
+  res: Response,
+  temperature: number,
+) {
   const openai = new OpenAI({
     baseURL: process.env.OPENROUTER_BASE_URL,
     apiKey: process.env.OPENROUTER_API_KEY,
@@ -11,7 +15,7 @@ export async function getChatCompletion(prompt: string, res: Response) {
   const stream = await openai.chat.completions.create({
     model: "deepseek/deepseek-r1-zero:free",
     messages: [{ role: "user", content: prompt }],
-    temperature: 0,
+    temperature: temperature || 0.7,
     stream: true,
   });
 

@@ -7,15 +7,15 @@ import { getChatCompletion, getChatCompletion2 } from "../openrouter.ts";
 const noteRepository = AppDataSource.getRepository(Note);
 
 export const saveNote = async (req: Request, res: Response) => {
-  const { noteText } = req.body;
-  if (!noteText) {
+  const { summary } = req.body;
+  if (!summary) {
     res.status(400).json({ error: "Note text is required." });
     return;
   }
   try {
-    const newNote = noteRepository.create({ content: noteText });
+    console.log(summary);
+    const newNote = noteRepository.create({ content: summary });
     await noteRepository.save(newNote);
-
     res.status(201).json({ message: "Note saved successfully", note: newNote });
     return;
   } catch (err: any) {
@@ -41,12 +41,19 @@ export const getNotes = async (req: Request, res: Response) => {
 };
 
 export const generateSummary = async (req: Request, res: Response) => {
-  const { noteText } = req.body;
+  const { noteText, temperature, tone, length } = req.body;
   if (!noteText) {
     res.status(400).json({ error: "Note text is required." });
     return;
   }
-  const prompt = `Summarize the following text in a clear and concise manner, capturing the main points:\n\n"${noteText}"`;
+  const lengthLimits: { [key: string]: string } = {
+    short: "between 20 and 100",
+    medium: "between 100 and 200",
+    long: "between 200 and 300",
+  };
+
+  const prompt = `Summarize the following text in a ${tone} tone. The summary must be ${lengthLimits[length]} characters long. Keep key details and ensure clarity:\n\n"${noteText}"`;
+  console.log(`Prompt: ${prompt}`);
   await getChatCompletion2(prompt);
-  await getChatCompletion(prompt, res);
+  await getChatCompletion(prompt, res, temperature);
 };
