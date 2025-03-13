@@ -1,0 +1,46 @@
+/* Folosește un container global pentru centrare */
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  text-align: center;
+}
+
+
+/* Styles for centering the content */
+.note-input-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Make the container full screen */
+    padding: 20px;
+    text-align: center; /* Center the text inside elements */
+  }
+  
+  .note-input-container .MuiTextField-root,
+  .note-input-container .MuiButton-root {
+    margin-bottom: 15px; /* Add some space between elements */
+  }
+  
+  /* Style for the card with the summary */
+  .note-input-container .MuiCard-root {
+    margin-top: 20px;
+    padding: 20px;
+    max-width: 500px; /* Optional, adjust to limit card size */
+    width: 100%;
+    background-color: #f5f5f5; /* Light background for contrast */
+  }
+  
+  .note-input-container h1 {
+    margin-bottom: 20px; /* Add space between header and content */
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  
+  .note-input-container .MuiTypography-root {
+    font-size: 1.2rem;
+  }
+  
