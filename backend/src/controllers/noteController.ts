@@ -52,7 +52,9 @@ export const generateSummary = async (req: Request, res: Response) => {
     long: "between 200 and 300",
   };
 
-  const prompt = `Summarize the following text in a ${tone} tone. The summary must be ${lengthLimits[length]} characters long. Keep key details and ensure clarity:\n\n"${noteText}"`;
+  // const prompt = `Summarize the following text in a ${tone} tone. The summary must be ${lengthLimits[length]} characters long. Keep key details and ensure clarity:\n\n"${noteText}"`;
+  const prompt = `Summarize the following text in a ${tone} tone. :\n\n"${noteText}"`;
+
   console.log(`Prompt: ${prompt}`);
   await getChatCompletion2(prompt);
   await getChatCompletion(prompt, res, temperature);
