@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../db.ts";
 import { Note } from "../models/Note.ts";
-import { getChatCompletion } from "../openrouter.ts";
+import { getChatCompletion, getChatCompletion2 } from "../openrouter.ts";
 
 const noteRepository = AppDataSource.getRepository(Note);
 
@@ -46,7 +46,7 @@ export const generateSummary = async (req: Request, res: Response) => {
     res.status(400).json({ error: "Note text is required." });
     return;
   }
-
-  const prompt = "Please summarize this text: " + noteText;
+  const prompt = `Summarize the following text in a clear and concise manner, capturing the main points:\n\n"${noteText}"`;
+  await getChatCompletion2(prompt);
   await getChatCompletion(prompt, res);
 };

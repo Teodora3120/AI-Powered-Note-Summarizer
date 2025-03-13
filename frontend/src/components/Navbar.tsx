@@ -1,33 +1,22 @@
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-// import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-
-import { Adb as AdbIcon } from "@mui/icons-material";
+import NewspaperTwoToneIcon from "@mui/icons-material/NewspaperTwoTone";
 
 export default function Navbar() {
   return (
-    <AppBar position="static">
+    <AppBar position="static" className="!bg-sky-900 !shadow-md">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+        <Toolbar disableGutters className="!flex !items-center">
+          <NewspaperTwoToneIcon className="!text-white !mr-2" />
           <Typography
             variant="h6"
-            noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
+            href="#"
+            className="!text-white !font-mono !font-bold !tracking-widest !no-underline"
           >
-            LOGO
+            AI Note Summarizer
           </Typography>
         </Toolbar>
       </Container>

@@ -31,3 +31,17 @@ export async function getChatCompletion(prompt: string, res: Response) {
     res.end(); // Close stream when done
   }
 }
+
+export async function getChatCompletion2(prompt: string) {
+  const openai = new OpenAI({
+    baseURL: process.env.OPENROUTER_BASE_URL,
+    apiKey: process.env.OPENROUTER_API_KEY,
+  });
+
+  const response = await openai.chat.completions.create({
+    model: "deepseek/deepseek-r1-zero:free",
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0,
+  });
+  console.log(response, response.choices[0] || "");
+}
