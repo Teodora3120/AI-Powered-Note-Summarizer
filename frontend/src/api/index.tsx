@@ -18,8 +18,9 @@ export class NotesApi {
         summary,
       });
       return response.data;
-    } catch (error) {
-      console.error("Error saving note", error);
+    } catch (error: any) {
+      const errMsg = error.response?.data?.error || error.message;
+      throw new Error(errMsg);
     }
   }
 
@@ -27,8 +28,9 @@ export class NotesApi {
     try {
       const response = await axios.get(`${this.url}/api/v1/notes/`);
       return response.data;
-    } catch (error) {
-      console.error("Failed to fetch notes", error);
+    } catch (error: any) {
+      const errMsg = error.response?.data?.error || error.message;
+      throw new Error(errMsg);
     }
   }
 
@@ -37,14 +39,21 @@ export class NotesApi {
     temperature: number,
     length: string,
     tone: string,
-    onStreamUpdate: (chunk: string) => void
+    onStreamUpdate: (chunk: string) => void,
+    signal?: AbortSignal
   ) {
     try {
       const response = await fetch(`${this.url}/api/v1/notes/summarize`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ noteText, temperature, length, tone }),
+        signal,
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "An error occurred");
+      }
 
       if (!response.body) {
         throw new Error("No response body from server");
@@ -60,8 +69,13 @@ export class NotesApi {
         const chunk = decoder.decode(value);
         onStreamUpdate(chunk);
       }
-    } catch (error) {
-      console.error("Error generating summary", error);
+    } catch (error: any) {
+      if (error.name === "AbortError") {
+        console.log("Fetch aborted.");
+        return;
+      }
+      const errMsg = error.response?.data?.error || error.message;
+      throw new Error(errMsg);
     }
   }
 }

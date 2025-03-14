@@ -12,19 +12,25 @@ interface Note {
 
 export const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]); // Updated state type
+  const [errMessage, setErrMessage] = useState<string>("");
 
   useEffect(() => {
     getNotes();
   }, []);
+
+  useEffect(() => {
+    setErrMessage("");
+  }, [notes]);
 
   const Api = new NotesApi();
 
   const getNotes = async () => {
     try {
       const response = await Api.getNotes();
-      setNotes(response.notes || []); // Ensure it's an array
+      setNotes(response.notes || []);
     } catch (err: any) {
-      console.error(err.message);
+      console.error("Could not fetch notes", err);
+      setErrMessage(err.message);
     }
   };
 
@@ -33,7 +39,7 @@ export const Notes = () => {
       {notes.length > 0 ? (
         notes.map((note) => (
           <Paper
-            key={note.id} // Use unique ID
+            key={note.id}
             elevation={3}
             sx={{
               bgcolor: "yellow",
@@ -61,6 +67,10 @@ export const Notes = () => {
             </Typography>
           </Paper>
         ))
+      ) : errMessage ? (
+        <Typography variant="h6" className="!text-red-800">
+          {errMessage}
+        </Typography>
       ) : (
         <Typography variant="h6" sx={{ color: "gray" }}>
           No saved notes yet...

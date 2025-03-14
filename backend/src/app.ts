@@ -9,10 +9,16 @@ const app = express();
 // ✅ Rate Limiter: 2 requests per minute
 const limiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 2,
-  message: { error: "Too many requests, please try again in a minute." },
-  headers: true,
+  max: 10,
+  standardHeaders: true, // Adds RateLimit headers
+  legacyHeaders: false, // Disable X-RateLimit-* headers
+  handler: (req, res) => {
+    res
+      .status(429)
+      .json({ error: "Too many requests, please try again in a minute." });
+  },
 });
+
 // ✅ Security Middlewares
 app.use(cors()); // Enable CORS
 app.use(helmet()); // Adds security headers
