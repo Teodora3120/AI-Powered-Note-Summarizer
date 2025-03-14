@@ -18,20 +18,26 @@ import { formatStreamingText } from "../utils/formatStreamingText";
 export const AIChat = () => {
   const [noteText, setNoteText] = useState<string>("");
   const [summary, setSummary] = useState<string>("");
-  const [loadingGenerate, setLoadingGenerate] = useState<boolean>(false);
-  const [loadingRegenerate, setLoadingRegenerate] = useState<boolean>(false);
-  const [loadingSave, setLoadingSave] = useState<boolean>(false);
-  const [attemptedGenerate, setAttemptedGenerate] = useState<boolean>(false);
-  const [attemptedSaving, setAttemptedSaving] = useState<boolean>(false);
-  const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
-  const [length, setLength] = useState("medium");
   const [tone, setTone] = useState("professional");
+  const [length, setLength] = useState("medium");
   const [temperature, setTemperature] = useState("medium");
   const temperatureMapping: { [key: string]: number } = {
     low: 0.3,
     medium: 0.7,
     high: 1.0,
   };
+
+  const [loadingGenerate, setLoadingGenerate] = useState<boolean>(false);
+  const [loadingRegenerate, setLoadingRegenerate] = useState<boolean>(false);
+  const [loadingSave, setLoadingSave] = useState<boolean>(false);
+  const [attemptedGenerate, setAttemptedGenerate] = useState<boolean>(false);
+
+  const [attemptedSaving, setAttemptedSaving] = useState<boolean>(false);
+  const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
+  const [errMessage, setErrMessage] = useState<string>("");
+
+  const [abortController, setAbortController] =
+    useState<AbortController | null>(null);
 
   useEffect(() => {
     setAttemptedGenerate(false);
@@ -40,6 +46,10 @@ export const AIChat = () => {
   useEffect(() => {
     setAttemptedSaving(false);
   }, [noteText, summary]);
+
+  useEffect(() => {
+    setErrMessage("");
+  }, [noteText]);
 
   const Api = new NotesApi();
 
@@ -57,37 +67,65 @@ export const AIChat = () => {
       setTimeout(() => setSaveSuccess(false), 3000);
       setLoadingSave(false);
     } catch (err: any) {
-      console.error(err.message);
+      console.error("Could not save note", err);
+      setErrMessage(err.message);
       setLoadingSave(false);
     }
   };
 
   const handleGenerateSummary = async (button: string) => {
-    if (!noteText) {
-      setAttemptedGenerate(true);
-      return;
-    }
-    setSummary("");
-
-    if (button === "generate") setLoadingGenerate(true);
-    if (button === "regenerate") setLoadingRegenerate(true);
-
-    let buffer = "";
-
-    await Api.handleGenerateSummary(
-      noteText,
-      temperatureMapping[temperature] || 0.7,
-      length,
-      tone,
-      (chunk) => {
-        buffer += chunk; // Append new chunk
-        const cleanedText = formatStreamingText(buffer);
-        setSummary(cleanedText); // Update UI dynamically
+    try {
+      if (!noteText) {
+        setAttemptedGenerate(true);
+        return;
       }
-    );
+      setSummary("");
 
-    if (button === "generate") setLoadingGenerate(false);
-    if (button === "regenerate") setLoadingRegenerate(false);
+      if (button === "generate") setLoadingGenerate(true);
+      if (button === "regenerate") setLoadingRegenerate(true);
+
+      let buffer = "";
+
+      // Create a new AbortController for each request
+      const controller = new AbortController();
+      setAbortController(controller); // Store it in state
+
+      await Api.handleGenerateSummary(
+        noteText,
+        temperatureMapping[temperature] || 0.7,
+        length,
+        tone,
+        (chunk) => {
+          buffer += chunk; // Append new chunk
+          const cleanedText = formatStreamingText(buffer);
+          setSummary(cleanedText); // Update UI dynamically
+        },
+        controller.signal // Pass abort signal
+      );
+
+      setAbortController(null); // Reset after completion
+      if (button === "generate") setLoadingGenerate(false);
+      if (button === "regenerate") setLoadingRegenerate(false);
+    } catch (err: any) {
+      if (err.name === "AbortError") {
+        console.log("Streaming aborted.");
+      } else {
+        console.error("Could not generate summary", err);
+        setErrMessage(err.message);
+      }
+    } finally {
+      if (button === "generate") setLoadingGenerate(false);
+      if (button === "regenerate") setLoadingRegenerate(false);
+    }
+  };
+
+  const handleStopGenerating = () => {
+    if (abortController) {
+      abortController.abort();
+      setAbortController(null);
+    }
+    setLoadingGenerate(false);
+    setLoadingRegenerate(false);
   };
 
   return (
@@ -185,6 +223,17 @@ export const AIChat = () => {
             >
               Regenerate
             </Button>
+            {loadingRegenerate ||
+              (loadingGenerate && (
+                <Button
+                  variant="contained"
+                  className={`!text-white !bg-red-800`}
+                  onClick={handleStopGenerating}
+                  disabled={!loadingRegenerate && !loadingGenerate}
+                >
+                  Stop
+                </Button>
+              ))}
           </div>
         </Grid>
 
@@ -195,7 +244,15 @@ export const AIChat = () => {
           display="flex"
           flexDirection="column"
         >
-          <Card className="!p-4 !border !border-gray-300" variant="outlined">
+          {errMessage && (
+            <Typography className="!text-red-800">{errMessage}</Typography>
+          )}
+          <Card
+            className={`!p-4 !border ${
+              errMessage ? "!border-red-700" : "!border-gray-300"
+            }  `}
+            variant="outlined"
+          >
             {saveSuccess && (
               <Typography className="text-green-600 text-center">
                 ✅ Note saved successfully!
