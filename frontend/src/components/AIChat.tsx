@@ -223,17 +223,16 @@ export const AIChat = () => {
             >
               Regenerate
             </Button>
-            {loadingRegenerate ||
-              (loadingGenerate && (
-                <Button
-                  variant="contained"
-                  className={`!text-white !bg-red-800`}
-                  onClick={handleStopGenerating}
-                  disabled={!loadingRegenerate && !loadingGenerate}
-                >
-                  Stop
-                </Button>
-              ))}
+            {(loadingRegenerate || loadingGenerate) && (
+              <Button
+                variant="contained"
+                className={`!text-white !bg-red-800`}
+                onClick={handleStopGenerating}
+                disabled={!loadingRegenerate && !loadingGenerate}
+              >
+                Stop
+              </Button>
+            )}
           </div>
         </Grid>
 

@@ -34,6 +34,16 @@ export class NotesApi {
     }
   }
 
+  public async handleDeleteNote(id: Number) {
+    try {
+      const response = await axios.delete(`${this.url}/api/v1/notes/${id}`);
+      return response.data;
+    } catch (error: any) {
+      const errMsg = error.response?.data?.error || error.message;
+      throw new Error(errMsg);
+    }
+  }
+
   public async handleGenerateSummary(
     noteText: string,
     temperature: number,
