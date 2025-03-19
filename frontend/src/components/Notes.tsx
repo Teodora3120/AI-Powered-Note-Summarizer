@@ -32,11 +32,13 @@ export const Notes = () => {
 
   useEffect(() => {
     getNotes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     getNotes();
     document.body.style.overflow = "hidden";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -126,7 +128,7 @@ export const Notes = () => {
               bgcolor: "#fdf6e3",
               padding: "70px",
               width: "500px",
-              height: "300px",
+              height: "500px",
               borderRadius: "8px",
               boxShadow: "4px 4px 10px rgba(0,0,0,0.2)",
               transform: `rotate(${Math.random() * 6 - 3}deg)`,

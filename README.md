@@ -70,6 +70,6 @@ REACT_APP_BACKEND_URL=http://localhost:5000
 | `POST` | `/notes/save`      | Save the summary     |
 | `POST` | `/notes/summarize` | Generate the summary |
 
-## 🎨 UI Preview
+## 🎨 DEMO
 
-![UI Preview](./assets/ui-preview.png)
+![Demo](./frontend/src/assets/Demo.gif)
