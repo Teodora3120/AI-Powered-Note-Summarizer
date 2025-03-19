@@ -22,7 +22,7 @@ This project is an AI-driven text summarization tool that generates concise summ
 ### **1. Clone the repository**
 
 ```sh
-git clone https://github.com/your-username/your-repo.git
+git clone https://github.com/Teodora3120/AI-Powered-Note-Summarizer.git
 cd your-repo
 ```
 
@@ -33,7 +33,7 @@ cd your-repo
 ```sh
 cd frontend
 npm install
-npm run dev
+npm run start
 ```
 
 #### Backend
@@ -64,11 +64,12 @@ REACT_APP_BACKEND_URL=http://localhost:5000
 
 ## 🔥 API Endpoints
 
-| Method | Endpoint           | Description          |
-| ------ | ------------------ | -------------------- |
-| `GET`  | `/notes`           | Get all notes        |
-| `POST` | `/notes/save`      | Save the summary     |
-| `POST` | `/notes/summarize` | Generate the summary |
+| Method   | Endpoint           | Description          |
+| -------- | ------------------ | -------------------- |
+| `GET`    | `/notes`           | Get all notes        |
+| `POST`   | `/notes/save`      | Save the summary     |
+| `POST`   | `/notes/summarize` | Generate the summary |
+| `DELETE` | `/notes/:id`       | Deletes a summary    |
 
 ## 🎨 DEMO
 
